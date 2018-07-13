@@ -37,7 +37,7 @@ namespace Warframe_Fixer.Model
         {
             _fileModel.SteamId64 = steamId;
             var text = _fileModel.TransformText();
-            System.IO.File.WriteAllText(FilePath, text);
+            //System.IO.File.WriteAllText(FilePath, text);
         }
     }
 }
