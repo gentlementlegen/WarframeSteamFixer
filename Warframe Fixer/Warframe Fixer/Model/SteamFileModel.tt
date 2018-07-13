@@ -1,0 +1,41 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+"AppState"
+{
+    "appid"        "230410"
+    "Universe"        "1"
+    "name"        "Warframe"
+    "StateFlags"        "4"
+    "installdir"        "Warframe"
+    "LastUpdated"        "1513645168"
+    "UpdateResult"        "0"
+    "SizeOnDisk"        "23034406406"
+    "buildid"        "2362179"
+    "LastOwner"        "<#=SteamId64#>"
+    "BytesToDownload"        "0"
+    "BytesDownloaded"        "0"
+    "AutoUpdateBehavior"        "0"
+    "AllowOtherDownloadsWhileRunning"        "0"
+    "UserConfig"
+    {
+        "language"        "english"
+    }
+    "InstalledDepots"
+    {
+        "230411"
+        {
+            "manifest"        "5301169201249491747"
+        }
+    }
+    "MountedDepots"
+    {
+        "230411"        "5301169201249491747"
+    }
+    "InstallScripts"
+    {
+        "230411"        "installscript.vdf"
+    }
+}
