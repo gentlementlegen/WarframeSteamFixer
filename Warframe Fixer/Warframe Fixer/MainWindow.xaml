@@ -36,6 +36,7 @@
                    TextWrapping="Wrap" />
 
 		<Button Content="Fix !"
+				Command="{Binding FixCommand}"
 				Grid.Row="1"/>
 	</Grid>
 </Window>

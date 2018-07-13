@@ -36,12 +36,10 @@ namespace Warframe_Fixer.ViewModel
             else
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
+                SimpleIoc.Default.Register<IPatcher, SteamPatcher>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
-
-            SteamPatcher s = new SteamPatcher();
-            s.Patch();
         }
 
         /// <summary>

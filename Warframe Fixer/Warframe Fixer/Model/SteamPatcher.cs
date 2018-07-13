@@ -15,7 +15,7 @@ namespace Warframe_Fixer.Model
         public bool Patch()
         {
             Task.Run(() => FetchSteamId64()).Wait();
-            _fileManager.FixFile(SteamId);
+            _fileManager.FixFile(SteamId64);
             return true;
         }
 

@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Warframe_Fixer.Model;
 
 namespace Warframe_Fixer.ViewModel
@@ -12,6 +13,7 @@ namespace Warframe_Fixer.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
+        private readonly IPatcher _patcher;
 
         /// <summary>
         /// The <see cref="WelcomeTitle" /> property's name.
@@ -39,7 +41,7 @@ namespace Warframe_Fixer.ViewModel
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService)
+        public MainViewModel(IDataService dataService, IPatcher patcher)
         {
             _dataService = dataService;
             _dataService.GetData(
@@ -53,6 +55,7 @@ namespace Warframe_Fixer.ViewModel
 
                     WelcomeTitle = item.Title;
                 });
+            _patcher = patcher;
         }
 
         ////public override void Cleanup()
@@ -61,5 +64,23 @@ namespace Warframe_Fixer.ViewModel
 
         ////    base.Cleanup();
         ////}
+
+        private RelayCommand _fixCommand;
+
+        /// <summary>
+        /// Gets the MyCommand.
+        /// </summary>
+        public RelayCommand FixCommand
+        {
+            get
+            {
+                return _fixCommand
+                    ?? (_fixCommand = new RelayCommand(
+                    () =>
+                    {
+                        _patcher.Patch();
+                    }));
+            }
+        }
     }
 }
