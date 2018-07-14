@@ -5,7 +5,7 @@ namespace Warframe_Fixer.Model
 {
     public class SteamPatcher : IPatcher
     {
-        public string SteamId { get; set; } = "ferfer957";
+        public string SteamId { get; set; } = "";
 
         public string SteamId64 { get; private set; } = "";
 

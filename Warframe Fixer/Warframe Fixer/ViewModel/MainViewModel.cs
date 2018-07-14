@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Warframe_Fixer.Model;
 
 namespace Warframe_Fixer.ViewModel
@@ -38,6 +40,30 @@ namespace Warframe_Fixer.ViewModel
             }
         }
 
+        private string _steamId;
+
+        public string SteamId
+        {
+            get => _steamId;
+            set => Set(ref _steamId, value);
+        }
+
+        private string _steamId64;
+
+        public string SteamId64
+        {
+            get => _steamId64;
+            set => Set(ref _steamId64, value);
+        }
+
+        private ObservableCollection<string> _logEntries = new ObservableCollection<string>();
+
+        public ObservableCollection<string> LogEntries
+        {
+            get => _logEntries;
+            set => Set(ref _logEntries, value);
+        }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -56,6 +82,7 @@ namespace Warframe_Fixer.ViewModel
                     WelcomeTitle = item.Title;
                 });
             _patcher = patcher;
+            LogEntries.Add("Hello, Tenno.");
         }
 
         ////public override void Cleanup()
@@ -78,7 +105,14 @@ namespace Warframe_Fixer.ViewModel
                     ?? (_fixCommand = new RelayCommand(
                     () =>
                     {
-                        _patcher.Patch();
+                        LogEntries.Add("Trying to fix...");
+                        Task.Run(() =>
+                        {
+                            _patcher.SteamId = SteamId;
+                            _patcher.Patch();
+                            SteamId64 = _patcher.SteamId64;
+                        });
+                        LogEntries.Add("Fix completed.");
                     }));
             }
         }

@@ -6,19 +6,19 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
         Height="300"
-        Width="300"
+        Width="500"
         Title="Warframe Fixer"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-    
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Skins/MainSkin.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
 
-    <Grid x:Name="LayoutRoot">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Skins/MainSkin.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<Grid x:Name="LayoutRoot">
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition />
@@ -26,17 +26,81 @@
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-        <TextBlock FontSize="36"
-                   FontWeight="Bold"
-                   Foreground="Purple"
-                   Text="{Binding WelcomeTitle}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-				   Grid.Row="0"
-                   TextWrapping="Wrap" />
 
-		<Button Content="Fix !"
-				Command="{Binding FixCommand}"
-				Grid.Row="1"/>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+
+			<TextBox Text="{Binding SteamId, Mode=TwoWay}"
+					 VerticalAlignment="Center"
+					 x:Name="SteamID"
+					 Margin="10" />
+			<TextBlock IsHitTestVisible="False" Text="Enter your steam ID"
+					   VerticalAlignment="Center" HorizontalAlignment="Left"
+					   Margin="15,0,0,0" Foreground="DarkGray">
+				<TextBlock.Style>
+					<Style TargetType="{x:Type TextBlock}">
+						<Setter Property="Visibility" Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Text, ElementName=SteamID}" Value="">
+								<Setter Property="Visibility" Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBlock.Style>
+			</TextBlock>
+
+			<TextBox Text="{Binding SteamId64, Mode=TwoWay}"
+					 Grid.Column="1"
+					 x:Name="SteamId64"
+					 VerticalAlignment="Center"
+					 IsEnabled="False"
+					 Margin="10" />
+			<TextBlock IsHitTestVisible="False" Text="Matching Steam ID 64"
+					   VerticalAlignment="Center" HorizontalAlignment="Left"
+					   Grid.Column="1"
+					   Margin="15,0,0,0" Foreground="DarkGray">
+				<TextBlock.Style>
+					<Style TargetType="{x:Type TextBlock}">
+						<Setter Property="Visibility" Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Text, ElementName=SteamId64}" Value="">
+								<Setter Property="Visibility" Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</TextBlock.Style>
+			</TextBlock>
+
+			<Button Content="Fix !"
+					Command="{Binding FixCommand}"
+					Width="60"
+					Height="30"
+					Margin="0 0 10 0"
+					HorizontalAlignment="Right"
+					Grid.Column="1"
+					Grid.Row="1" />
+		</Grid>
+
+		<Border Grid.Row="1"
+				BorderBrush="Gray"
+				BorderThickness="1"
+				Margin="10">
+			<ItemsControl ItemsSource="{Binding LogEntries}">
+				<ItemsControl.Template>
+					<ControlTemplate>
+						<ScrollViewer CanContentScroll="True">
+							<ItemsPresenter />
+						</ScrollViewer>
+					</ControlTemplate>
+				</ItemsControl.Template>
+			</ItemsControl>
+		</Border>
 	</Grid>
 </Window>

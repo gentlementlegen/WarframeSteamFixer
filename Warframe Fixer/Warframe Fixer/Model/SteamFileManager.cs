@@ -14,13 +14,13 @@ namespace Warframe_Fixer.Model
     public class SteamFileManager
     {
         private const string FileName = "appmanifest_230410.acf";
-        private string FilePath = "";
+        private string _filePath = "";
         private readonly SteamFileModel _fileModel = new SteamFileModel();
         private string _steamExePath;
 
         public SteamFileManager()
         {
-            FilePath = GetSteamInstallPath(Registry.LocalMachine.OpenSubKey(@"Software\WOW6432Node\Valve"), "Steam") + FileName;
+            _filePath = GetSteamInstallPath(Registry.LocalMachine.OpenSubKey(@"Software\WOW6432Node\Valve"), "Steam") + FileName;
         }
 
         private string GetSteamInstallPath(RegistryKey parentKey, string name)
@@ -43,7 +43,7 @@ namespace Warframe_Fixer.Model
             _fileModel.SteamId64 = steamId;
             var text = _fileModel.TransformText();
             ShutdownSteamInstance();
-            System.IO.File.WriteAllText(FilePath, text);
+            System.IO.File.WriteAllText(_filePath, text);
             StartSteamInstance();
         }
 
