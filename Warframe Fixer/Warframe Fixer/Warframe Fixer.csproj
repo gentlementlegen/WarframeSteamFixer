@@ -76,6 +76,7 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Model\IPatcher.cs" />
+    <Compile Include="Model\Logger.cs" />
     <Compile Include="Model\SteamFileManager.cs" />
     <Compile Include="Model\SteamFileModel.cs">
       <AutoGen>True</AutoGen>

@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using Warframe_Fixer.Model;
 
 namespace Warframe_Fixer.ViewModel
@@ -26,7 +28,7 @@ namespace Warframe_Fixer.ViewModel
 
         /// <summary>
         /// Gets the WelcomeTitle property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public string WelcomeTitle
         {
@@ -82,7 +84,9 @@ namespace Warframe_Fixer.ViewModel
                     WelcomeTitle = item.Title;
                 });
             _patcher = patcher;
+            BindingOperations.EnableCollectionSynchronization(_logEntries, _lock);
             LogEntries.Add("Hello, Tenno.");
+            _cancelToken = _cancelTokenSource.Token;
         }
 
         ////public override void Cleanup()
@@ -93,6 +97,10 @@ namespace Warframe_Fixer.ViewModel
         ////}
 
         private RelayCommand _fixCommand;
+        private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+        private CancellationToken _cancelToken;
+        private bool _isFixing;
+        private object _lock = new object();
 
         /// <summary>
         /// Gets the MyCommand.
@@ -105,14 +113,28 @@ namespace Warframe_Fixer.ViewModel
                     ?? (_fixCommand = new RelayCommand(
                     () =>
                     {
-                        LogEntries.Add("Trying to fix...");
+                        LogEntries.Add("Starting fix...");
+                        if (_isFixing)
+                        {
+                            LogEntries.Add("Aborting previous fix...");
+                            _cancelTokenSource.Cancel();
+                        }
                         Task.Run(() =>
                         {
+                            _isFixing = true;
                             _patcher.SteamId = SteamId;
                             _patcher.Patch();
                             SteamId64 = _patcher.SteamId64;
+                        }, _cancelToken).ContinueWith((e) =>
+                        {
+                            _isFixing = false;
+                            if (e.IsCanceled)
+                                LogEntries.Add("Fix cancelled.");
+                            if (e.IsFaulted)
+                                LogEntries.Add("Fix could not be completed. Reason: " + e.Exception.Message);
+                            if (e.IsCompleted && !e.IsCanceled)
+                                LogEntries.Add("Fix completed.");
                         });
-                        LogEntries.Add("Fix completed.");
                     }));
             }
         }
