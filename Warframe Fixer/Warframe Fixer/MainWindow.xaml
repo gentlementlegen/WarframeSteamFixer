@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+		xmlns:model="clr-namespace:Warframe_Fixer.Model"
         mc:Ignorable="d ignore"
         Height="300"
         Width="500"
@@ -92,7 +93,7 @@
 				BorderBrush="Gray"
 				BorderThickness="1"
 				Margin="10">
-			<ItemsControl ItemsSource="{Binding LogEntries}">
+			<ItemsControl ItemsSource="{Binding Source={x:Static model:Logger.Logs}}">
 				<ItemsControl.Template>
 					<ControlTemplate>
 						<ScrollViewer CanContentScroll="True">
@@ -100,6 +101,11 @@
 						</ScrollViewer>
 					</ControlTemplate>
 				</ItemsControl.Template>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="LogItem">
+						<TextBlock Text="{Binding MessageFormatted}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
 			</ItemsControl>
 		</Border>
 	</Grid>

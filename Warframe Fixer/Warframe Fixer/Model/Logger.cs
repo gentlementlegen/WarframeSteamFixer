@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace Warframe_Fixer.Model
 {
@@ -38,8 +39,14 @@ namespace Warframe_Fixer.Model
     public static class Logger
     {
         private static readonly ObservableCollection<LogItem> _logs = new ObservableCollection<LogItem>();
+        private static object _lock = new object();
 
         public static IReadOnlyList<LogItem> Logs => _logs;
+
+        static Logger()
+        {
+            BindingOperations.EnableCollectionSynchronization(_logs, _lock);
+        }
 
         public static void Log(string message)
         {

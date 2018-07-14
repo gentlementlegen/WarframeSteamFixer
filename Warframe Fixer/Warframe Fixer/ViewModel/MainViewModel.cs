@@ -58,14 +58,6 @@ namespace Warframe_Fixer.ViewModel
             set => Set(ref _steamId64, value);
         }
 
-        private ObservableCollection<string> _logEntries = new ObservableCollection<string>();
-
-        public ObservableCollection<string> LogEntries
-        {
-            get => _logEntries;
-            set => Set(ref _logEntries, value);
-        }
-
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -84,8 +76,7 @@ namespace Warframe_Fixer.ViewModel
                     WelcomeTitle = item.Title;
                 });
             _patcher = patcher;
-            BindingOperations.EnableCollectionSynchronization(_logEntries, _lock);
-            LogEntries.Add("Hello, Tenno.");
+            Logger.Log("Hello, Tenno.");
             _cancelToken = _cancelTokenSource.Token;
         }
 
@@ -100,7 +91,6 @@ namespace Warframe_Fixer.ViewModel
         private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
         private CancellationToken _cancelToken;
         private bool _isFixing;
-        private object _lock = new object();
 
         /// <summary>
         /// Gets the MyCommand.
@@ -113,10 +103,10 @@ namespace Warframe_Fixer.ViewModel
                     ?? (_fixCommand = new RelayCommand(
                     () =>
                     {
-                        LogEntries.Add("Starting fix...");
+                        Logger.Log("Starting fix...");
                         if (_isFixing)
                         {
-                            LogEntries.Add("Aborting previous fix...");
+                            Logger.Log("Aborting previous fix...");
                             _cancelTokenSource.Cancel();
                         }
                         Task.Run(() =>
@@ -129,11 +119,11 @@ namespace Warframe_Fixer.ViewModel
                         {
                             _isFixing = false;
                             if (e.IsCanceled)
-                                LogEntries.Add("Fix cancelled.");
+                                Logger.Log("Fix cancelled.");
                             if (e.IsFaulted)
-                                LogEntries.Add("Fix could not be completed. Reason: " + e.Exception.Message);
+                                Logger.Log("Fix could not be completed. Reason: " + e.Exception.Message);
                             if (e.IsCompleted && !e.IsCanceled)
-                                LogEntries.Add("Fix completed.");
+                                Logger.Log("Fix completed.");
                         });
                     }));
             }
