@@ -42,9 +42,10 @@ namespace Warframe_Fixer.Model
         {
             _fileModel.SteamId64 = steamId;
             var text = _fileModel.TransformText();
-            //ShutdownSteamInstance();
-            //System.IO.File.WriteAllText(_filePath, text);
-            //StartSteamInstance();
+            ShutdownSteamInstance();
+            Logger.Log("Patching Steam file at [" + _filePath + "]");
+            System.IO.File.WriteAllText(_filePath, text);
+            StartSteamInstance();
         }
 
         /// <summary>
@@ -53,6 +54,7 @@ namespace Warframe_Fixer.Model
         private void ShutdownSteamInstance()
         {
             var processes = Process.GetProcessesByName("Steam");
+            Logger.Log("Shutting down any Steam running instances");
             if (processes.Length > 0)
             {
                 foreach (var process in processes)
@@ -67,6 +69,7 @@ namespace Warframe_Fixer.Model
 
         private void StartSteamInstance()
         {
+            Logger.Log("Trying to restart Steam client");
             if (!string.IsNullOrEmpty(_steamExePath))
                 Process.Start(_steamExePath);
         }

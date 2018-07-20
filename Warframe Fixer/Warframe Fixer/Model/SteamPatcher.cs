@@ -14,6 +14,7 @@ namespace Warframe_Fixer.Model
 
         public bool Patch()
         {
+            Logger.Log("Trying to fetch SteamID64 for user " + SteamId);
             Task.Run(() => FetchSteamId64()).Wait();
             _fileManager.FixFile(SteamId64);
             return true;

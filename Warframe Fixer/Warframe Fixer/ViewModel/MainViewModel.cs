@@ -76,7 +76,7 @@ namespace Warframe_Fixer.ViewModel
                     WelcomeTitle = item.Title;
                 });
             _patcher = patcher;
-            Logger.Log("Hello, Tenno.");
+            Logger.Log("Welcome, Tenno.");
             _cancelToken = _cancelTokenSource.Token;
         }
 
